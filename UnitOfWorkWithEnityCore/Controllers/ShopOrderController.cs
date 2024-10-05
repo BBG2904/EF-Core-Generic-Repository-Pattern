@@ -1,5 +1,6 @@
 ﻿using EFCoreDatabase.Entities;
 using EFCoreDatabase.Repositories.Interfaces;
+using EFCoreDatabase.UnitOfWork;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,30 +10,36 @@ namespace UnitOfWorkWithEnityCore.Controllers
     [ApiController]
     public class ShopOrderController : ControllerBase
     {
-        private IGenericRepository<Order> _orderRepository;
-        private IGenericRepository<Item> _itemRepository;
-        private IGenericRepository<OrderItem> _orderItemRepository;
+        private IUnitOfWork<Order> _orderUOW;
         public ShopOrderController(
-            IGenericRepository<Order> orderRepository,
-            IGenericRepository<Item> itemRepository,
-            IGenericRepository<OrderItem> orderItemRepository)
+            IUnitOfWork<Order> order)
         {
-            _orderRepository = orderRepository;
-            _itemRepository = itemRepository;
-            _orderItemRepository = orderItemRepository;
+            _orderUOW = order;
         }
 
+        //sample data json request
+        //        {
+        //  "name": "X Order",
+        //  "shopId": 1,
+        //  "orderItems": [
+        //    {
+        //      "itemId": 1,
+        //      "createdDate": "2024-10-05T11:05:50.355Z"
+        //    }
+        //  ]
+        //}
         [HttpPost]
         public async Task<IActionResult> CreateShopOrder([FromBody] Order order)
         {
-            if(order == null)
+            if (order == null)
             {
                 return BadRequest("Order is Invalid");
             }
 
-            await _orderRepository.Insert(order);
+            await _orderUOW.EntityRepository.Insert(order);
+            await _orderUOW.Complete();
 
-            return Ok("Order Created Successfully");
+            return Ok("Order Created Successfully :" + order.Id);
         }
     }
 }

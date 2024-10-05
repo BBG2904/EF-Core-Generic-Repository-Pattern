@@ -16,21 +16,17 @@ namespace EFCoreDatabase.Repositories.Implementations
 
         public async Task<IEnumerable<T>> GetAll()
         {
-           return _context.Set<T>().AsNoTracking().ToList();
+           return await _context.Set<T>().AsNoTracking().ToListAsync();
         }
 
         public async Task Insert(T obj)
         {
             await _context.Set<T>().AddAsync(obj);
-            await _context.SaveChangesAsync();
         }
-
-
 
         public async  Task Update(T obj)
         {
             _context.Update(obj);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<T> GetById(int id)
@@ -42,7 +38,6 @@ namespace EFCoreDatabase.Repositories.Implementations
         {
             T obj = await GetById(id);
             _context.Set<T>().Remove(obj);
-            await _context.SaveChangesAsync();
         }
 
     }
