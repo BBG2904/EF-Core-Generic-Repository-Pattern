@@ -30,7 +30,7 @@ namespace EFCoreDatabase.Context
                 .WithMany(oi => oi.OrderItems)
                 .HasForeignKey(o => o.ItemId);
 
-            modelBuilder.Entity<Shop>().HasData(new Shop() { Id = 1, Address = "X", Name = "Swaraj" }, new Shop() { Id = 2, Address = "X", Name = "More" });
+            modelBuilder.Entity<Shop>().HasData(new Shop() { Id = 1, Address = "X", Name = "XMart" }, new Shop() { Id = 2, Address = "Y", Name = "YMart" });
             modelBuilder.Entity<Item>().HasData(new Item() { Id = 1, Name = "Oil" }, new Item() { Id = 2, Name = "Dal" }, new Item()
             {
                 Id = 3,
